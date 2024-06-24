@@ -24,32 +24,18 @@ const CallControl = (props: Props) => {
   const containerRef = useRef<HTMLDivElement>(null);
 
   useGSAP(() => {
-    const items = Array.from(containerRef.current?.children ?? []);
-    const middle = Math.floor(items.length / 2);
+    const items = containerRef.current?.children ?? [];
+    const timeline = gsap.timeline();
 
-    const tlLeft = gsap.timeline();
-    const tlMiddle = gsap.timeline();
-    const tlRight = gsap.timeline();
-
-    const animation = {
+    timeline.from(items, {
       delay: 0.8,
       opacity: 0,
       y: 50,
-      stagger: 0.2,
+      stagger: {
+        each: 0.1,
+        from: "center"
+      },
       ease: "back.out(1.7)",
-    };
-
-    const left = items.slice(0, middle).reverse();
-    const right = items.slice(middle + 1);
-
-    tlLeft.from(left, {
-      ...animation,
-      delay: 1,
-    });
-    tlMiddle.from(items[middle], animation);
-    tlRight.from(right, {
-      ...animation,
-      delay: 1,
     });
   });
 

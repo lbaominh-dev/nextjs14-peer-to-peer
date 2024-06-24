@@ -2,8 +2,8 @@
 
 import useSocket from "@/hooks/useSocket";
 import useUserMedia from "@/hooks/useUserMedia";
-import Peer from "peerjs";
-import React, { use, useCallback, useEffect } from "react";
+import Peer, { PeerOptions } from "peerjs";
+import React, { useCallback, useEffect } from "react";
 
 type UserMediaContextType = {
   id: string;
@@ -25,6 +25,7 @@ type VideoCallContextType = {
 type VideoCallProviderProps = React.PropsWithChildren<{
   roomId: string;
   id: string;
+  peerOptions?: PeerOptions;
 }>;
 
 export const VideoCallContext = React.createContext<
@@ -34,6 +35,7 @@ export const VideoCallContext = React.createContext<
 const VideoCallProvider: React.FC<VideoCallProviderProps> = ({
   roomId,
   id,
+  peerOptions,
   children,
 }) => {
   const [localPeer, setLocalPeer] = React.useState<Peer | null>(null);
@@ -181,11 +183,7 @@ const VideoCallProvider: React.FC<VideoCallProviderProps> = ({
   const initLocalPeer = () => {
     if (localPeer) return;
 
-    const peer = new Peer(id, {
-      host: "dtw90n1g-9000.asse.devtunnels.ms",
-      path: "/",
-      debug: 2,
-    });
+    const peer = new Peer(id, peerOptions);
 
     setLocalPeer(peer);
   };
